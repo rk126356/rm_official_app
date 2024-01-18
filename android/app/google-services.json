@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "465402594257",
+    "project_id": "rm-matka-1301f",
+    "storage_bucket": "rm-matka-1301f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465402594257:android:edefe91b20cc14e57516f0",
+        "android_client_info": {
+          "package_name": "com.rm_matka"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG9V6Bq2WpUpggyFxEOmQLqqNl-jySphg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
