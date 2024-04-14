@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rm_official_app/widgets/bottom_contact_widget.dart';
 import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
+import 'package:rm_official_app/widgets/fade_red_heading_widget.dart';
 import 'package:rm_official_app/widgets/heading_logo_widget.dart';
 import 'package:rm_official_app/widgets/heading_title_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:rm_official_app/widgets/success_snackbar_widget.dart';
+import 'package:rm_official_app/widgets/white_side_heading_widget.dart';
 
 import '../../const/colors.dart';
 import '../../provider/user_provider.dart';
@@ -33,7 +35,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       _isLoading = true;
     });
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    const apiUrl = 'https://rmmatka.com/ravan/api/change-password';
+    const apiUrl = 'https://rmmatka.com/app/api/change-password';
 
     try {
       final response = await http.post(
@@ -90,142 +92,81 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           children: [
             const HeadingLogo(),
             const SizedBox(height: 20),
-            const HeadingTitle(title: 'Change Password'),
+            const FadeRedHeading(title: 'Change Password'),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: const BorderRadius.all(Radius.circular(12))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'CURRENT PASSWORD',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
+                  color: const Color.fromARGB(255, 241, 201, 121),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'CURRENT PASSWORD',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
-                      const SizedBox(
-                        height: 12,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: currentPasswordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter Current Password',
+                        filled: true,
                       ),
-                      TextField(
-                        controller: currentPasswordController,
-                        decoration: const InputDecoration(
-                          labelText: 'ENTER CURRENT PASSWORD',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                            ),
-                          ),
-                          disabledBorder: InputBorder.none,
-                        ),
+                    ),
+                    const SizedBox(height: 18),
+                    const Text(
+                      'NEW PASSWORD',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
-                      const SizedBox(
-                        height: 18,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      obscureText: true,
+                      controller: newPasswordController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter New Password',
+                        filled: true,
                       ),
-                      const Text(
-                        'NEW PASSWORD',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16),
+                    ),
+                    const SizedBox(height: 18),
+                    const Text(
+                      'CONFIRM NEW PASSWORD',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
-                      const SizedBox(
-                        height: 12,
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      obscureText: true,
+                      controller: confirmNewPasswordController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: 'Confirm New Password',
+                        filled: true,
                       ),
-                      TextField(
-                        obscureText: true,
-                        controller: newPasswordController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: 'ENTER NEW PASSWORD',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          disabledBorder: InputBorder.none,
-                        ),
-                      ),
-                      const SizedBox(height: 18),
-                      const Text(
-                        'CONFIRM NEW PASSWORD',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        obscureText: true,
-                        controller: confirmNewPasswordController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: 'CONFIRM NEW PASSWORD',
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black),
-                          ),
-                          disabledBorder: InputBorder.none,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -235,10 +176,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 : ElevatedButton(
                     onPressed: changePassword,
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
+                      primary: Colors.red,
+                      onPrimary: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 20,
                       ),
                     ),
                     child: const Text(
@@ -250,7 +195,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                   ),
             const SizedBox(height: 15),
-            const BottomContact()
+            const BottomContact(),
           ],
         ),
       ),

@@ -49,17 +49,8 @@ class AllBidsPopup extends StatelessWidget {
                     for (int i = 0; i < histories.length; i++)
                       Column(
                         children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              border: BorderDirectional(
-                                top: BorderSide(
-                                  color: Colors.blueGrey,
-                                ),
-                              ),
-                            ),
-                            child: BidHistoryLoop(
-                              history: histories[i],
-                            ),
+                          BidHistoryLoop(
+                            history: histories[i],
                           ),
                           const SizedBox(
                             height: 2,

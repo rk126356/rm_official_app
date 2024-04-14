@@ -10,16 +10,31 @@ Future<Map<String, dynamic>> submitSangamBid({
   required String marketId,
   required String userId,
 }) async {
-  const apiUrl = 'https://rmmatka.com/ravan/api/Market-bids';
-  final requestBody = {
-    'bid_point': bid.betAmount.toString(),
-    'open_pana': bid.open.toString(),
-    'close_pana': bid.close.toString(),
-    'market_id': marketId,
-    'session': isOpen.toLowerCase(),
-    'type': title.toLowerCase(),
-    'user_id': userId,
-  };
+  const apiUrl = 'https://rmmatka.com/app/api/Market-bids';
+  Map<String, String> requestBody;
+  if (title == 'HALF SANGAM') {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'open_digit': bid.open.toString(),
+      'close_pana': bid.close.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  } else {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'open_pana': bid.open.toString(),
+      'close_pana': bid.close.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  }
 
   try {
     final httpResponse = await http.post(

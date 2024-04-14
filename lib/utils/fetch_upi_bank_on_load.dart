@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../provider/user_provider.dart';
 
 Future<void> getUpi(context) async {
-  const apiUrl = 'https://rmmatka.com/ravan/api/get-upi';
+  const apiUrl = 'https://rmmatka.com/app/api/get-upi';
   final userProvider = Provider.of<UserProvider>(context, listen: false);
   try {
     var response = await http.post(Uri.parse(apiUrl), body: {
@@ -25,7 +25,7 @@ Future<void> getUpi(context) async {
 }
 
 Future<void> getBankDetails(context) async {
-  const apiUrl = 'https://rmmatka.com/ravan/api/get-bank-details';
+  const apiUrl = 'https://rmmatka.com/app/api/get-bank-details';
   final userProvider = Provider.of<UserProvider>(context, listen: false);
 
   try {

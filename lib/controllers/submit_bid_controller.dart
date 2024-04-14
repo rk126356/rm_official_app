@@ -11,17 +11,61 @@ Future<Map<String, dynamic>> submitBid({
   required String marketId,
   required String userId,
 }) async {
-  const apiUrl = 'https://rmmatka.com/ravan/api/Market-bids';
-  final requestBody = {
-    'bid_point': bid.betAmount.toString(),
-    'triple_pana': title.toLowerCase() == 'jodi digit'
-        ? bid.sNo.toString().padLeft(2, '0')
-        : bid.sNo.toString(),
-    'market_id': marketId,
-    'session': isOpen.toLowerCase(),
-    'type': title.toLowerCase(),
-    'user_id': userId,
-  };
+  const apiUrl = 'https://rmmatka.com/app/api/Market-bids';
+  Map<String, String> requestBody;
+  if (title == 'SINGLE DIGIT') {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'single_digit': bid.sNo.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  } else if (title == 'JODI DIGIT') {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'double_digit': title.toLowerCase() == 'jodi digit'
+          ? bid.sNo.toString().padLeft(2, '0')
+          : bid.sNo.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  } else if (title == 'SINGLE PANNA') {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'single_pana': bid.sNo.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  } else if (title == 'DOUBLE PANNA') {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'double_pana': bid.sNo.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  } else {
+    requestBody = {
+      'bid_point': bid.betAmount.toString(),
+      'triple_pana': bid.sNo == 0 ? '000' : bid.sNo.toString(),
+      'market_id': marketId,
+      'session': isOpen.toLowerCase(),
+      'type': title.toLowerCase(),
+      'user_id': userId,
+      'game_category': title,
+    };
+  }
 
   try {
     final httpResponse = await http.post(

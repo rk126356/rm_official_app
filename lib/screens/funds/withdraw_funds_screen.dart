@@ -11,9 +11,9 @@ import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
 
 import '../../const/colors.dart';
 import '../../provider/user_provider.dart';
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/heading_logo_widget.dart';
 import '../../widgets/success_snackbar_widget.dart';
-import '../navigation/bottom_navigation.dart';
 import 'package:http/http.dart' as http;
 
 class WithdrawFundsScreen extends StatefulWidget {
@@ -27,6 +27,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   String? selectedPaymentMethod;
   bool _isButtonLoading = false;
   String amount = '0';
+  String phoneNumber = '';
 
   List<PaymentMethod> paymentMethods = [
     PaymentMethod(
@@ -51,6 +52,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
       paymentMethods.removeWhere((element) => element.name == 'UPI ACCOUNT');
       paymentMethods.add(PaymentMethod(
           name: 'UPI ACCOUNT', imagePath: 'assets/images/other_upi.png'));
+      paymentMethods.add(PaymentMethod(
+          name: 'BANK ACCOUNT', imagePath: 'assets/images/bank.png'));
     }
     if (int.parse(amount) >= 5000) {
       paymentMethods.removeWhere((element) => element.name == 'UPI ACCOUNT');
@@ -62,7 +65,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   }
 
   void withdrawFunds() async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/withdraw-amount';
+    const apiUrl = 'https://rmmatka.com/app/api/withdraw-amount';
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     if (userProvider.user.upi.isEmpty &&
@@ -86,14 +89,11 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         if (data['error'] == false) {
-          print(data);
-
           showCoolSuccessSnackbar(context, data['message']);
         } else {
           showCoolErrorSnackbar(context, data['message']);
         }
       } else {
-        print(response.statusCode);
         showCoolErrorSnackbar(context, 'Error: Check your internet connection');
       }
     } catch (e) {
@@ -105,10 +105,34 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     });
   }
 
+  void fetchContactData() async {
+    const apiUrl = 'https://rmmatka.com/app/api/home-page';
+
+    try {
+      var response = await http.get(
+        Uri.parse(apiUrl),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        if (data['error'] == false) {
+          setState(() {
+            phoneNumber = data['data']['contact']['contact_no'];
+          });
+        }
+      } else {
+        showCoolSuccessSnackbar(context, 'Error: No network available');
+      }
+    } catch (e) {
+      showCoolSuccessSnackbar(context, 'Error: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     checkPaymentMethod();
+    fetchContactData();
   }
 
   @override
@@ -116,30 +140,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        actions: [
-          ElevatedButton.icon(
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(AppColors.redType),
-            ),
-            onPressed: () {},
-            icon: const Icon(
-              Icons.wallet,
-              color: Colors.white,
-            ),
-            label: Text(
-              userProvider.user.balance.toString(),
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: AppColors.redType,
-        title: const Text(
-          'Withdraw Funds',
-          style: TextStyle(color: Colors.white),
-        ),
+      appBar: const AppBarWidget(
+        title: 'WITHDRAW FUNDS',
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -149,26 +151,56 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 12,
-                  ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 36, vertical: 12),
                     decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 42, 104, 44),
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: const Text(
-                      'WITHDRAWAL 11:AM TO 03:00 and 03:00 PM TO 06:00 PM AVAILABLE',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      color: AppColors.opBlueType,
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        phoneNumber.isEmpty
+                            ? const CircularProgressIndicator()
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.phone,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'For assistance, contact: ',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    phoneNumber,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Having difficulty? Request manual withdrawal on WhatsApp.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Withdrawal limit: ₹1000 - ₹5 Lakh every 12 hrs.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(
-                    height: 18,
+                    height: 12,
                   ),
                   Container(
                     padding:
@@ -216,22 +248,6 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                   color: Colors.black,
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              disabledBorder: InputBorder.none,
                             ),
                           ),
                           const SizedBox(
@@ -304,7 +320,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       : paymentMethods.isEmpty
                           ? ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         const WithdrawAccountsScreen(),
@@ -343,6 +359,24 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                 ),
                               ),
                             ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 36, vertical: 12),
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 42, 104, 44),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: const Text(
+                      'WITHDRAWAL 11:AM TO 06:00 PM AVAILABLE',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                    ),
+                  ),
                 ],
               ),
             ),

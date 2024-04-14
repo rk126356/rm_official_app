@@ -5,6 +5,7 @@ import 'package:rm_official_app/widgets/heading_title_widget.dart';
 
 import '../../models/calculate_bid_model.dart';
 import '../../models/today_market_model.dart';
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/bid_popup_widget.dart';
 import '../../widgets/error_snackbar_widget.dart';
 import '../../widgets/fade_red_heading_widget.dart';
@@ -42,7 +43,7 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
         bids: bids,
         market: widget.market,
         isOpen: widget.isOpen,
-        title: 'jodi digit',
+        title: 'JODI DIGIT',
       ),
     );
   }
@@ -57,13 +58,8 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
@@ -99,7 +95,9 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
                     const SizedBox(
                       height: 18,
                     ),
-                    const HeadingTitle(title: 'AVANTI DAY\n(CLOSE)'),
+                    HeadingTitle(
+                        title:
+                            '${widget.market.marketName}\n(${widget.isOpen})'),
                     const SizedBox(
                       height: 20,
                     ),
@@ -293,8 +291,8 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 38,
-          height: 38,
+          width: 36,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1),
             color: Colors.red,
@@ -305,7 +303,7 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
             child: Text(
               heading.padLeft(2, '0'),
               style: const TextStyle(
-                fontSize: 10,
+                fontSize: 8,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -314,18 +312,18 @@ class _InsideJodiScreenState extends State<InsideJodiScreen> {
         ),
         const SizedBox(height: 3),
         Container(
-          width: 38,
-          height: 38,
+          width: 36,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 1),
-            color: AppColors.primaryColor,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(6),
           ),
           child: TextField(
             maxLength: 5,
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black, fontSize: 10),
+            style: const TextStyle(color: Colors.black, fontSize: 8),
             onChanged: (value) {
               createBid(index, int.tryParse(value) ?? 0);
               setState(() {

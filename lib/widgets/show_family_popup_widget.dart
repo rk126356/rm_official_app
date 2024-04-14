@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rm_official_app/const/colors.dart';
+import 'package:rm_official_app/controllers/submit_all_pana_bids.dart';
 import 'package:rm_official_app/controllers/submit_family_bid_controller.dart';
 import 'package:rm_official_app/models/today_market_model.dart';
 import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
@@ -13,7 +14,6 @@ import 'package:rm_official_app/widgets/success_snackbar_widget.dart';
 import '../models/family_bid_model.dart';
 import '../provider/resend_otp_timer_provider.dart';
 import '../provider/user_provider.dart';
-import '../screens/bid/bid_history_screen.dart';
 import '../screens/navigation/bottom_navigation.dart';
 
 class BidFamilyPopup extends StatefulWidget {
@@ -56,14 +56,28 @@ class _BidFamilyPopupState extends State<BidFamilyPopup> {
       if (kDebugMode) {
         print('SNO: ${bid.digit} Amount: ${bid.amount}');
       }
-      final response = await submitFamilyBids(
-        bids: bid,
-        isOpen: widget.isOpen,
-        marketId: widget.market.id,
-        userId: userProvider.user.id,
-        api: widget.api,
-        type: widget.type ?? 'patta_group',
-      );
+      Map<String, dynamic> response;
+      if (widget.api == 'https://rmmatka.com/app/api/spdp-bids') {
+        response = await submitAllPana(
+          bids: bid,
+          isOpen: widget.isOpen,
+          marketId: widget.market.id,
+          userId: userProvider.user.id,
+          api: widget.api,
+          type: bid.type!.toLowerCase(),
+          title: widget.title,
+        );
+      } else {
+        response = await submitFamilyBids(
+          bids: bid,
+          isOpen: widget.isOpen,
+          marketId: widget.market.id,
+          userId: userProvider.user.id,
+          api: widget.api,
+          type: widget.type ?? 'patta_group',
+          title: widget.title,
+        );
+      }
 
       if (kDebugMode) {
         print('API Response: $response');
@@ -176,14 +190,13 @@ class _BidFamilyPopupState extends State<BidFamilyPopup> {
                           for (final data in bid.bids!)
                             TableRow(
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text('PANNA'),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(data.number),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child:
-                                      Text('${data.number} = ${data.bidPoint}'),
+                                  child: Text(data.bidPoint),
                                 ),
                               ],
                             ),

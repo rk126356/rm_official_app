@@ -12,6 +12,7 @@ import 'package:rm_official_app/widgets/show_family_popup_widget.dart';
 
 import '../../models/family_bid_model.dart';
 import '../../models/today_market_model.dart';
+import '../../widgets/app_bar_widget.dart';
 
 class InsideFamilyJodi extends StatefulWidget {
   const InsideFamilyJodi({
@@ -49,7 +50,7 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
         market: widget.market,
         isOpen: widget.isOpen,
         title: widget.title,
-        api: 'https://rmmatka.com/ravan/api/family-bids',
+        api: 'https://rmmatka.com/app/api/family-bids',
         type: 'jodi',
       ),
     );
@@ -58,7 +59,8 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
   Future<void> addBids({required int amount, required int digit}) async {
     total = 0;
 
-    final result = await getFamilyNumber(digit, 'jodi_group');
+    final result = await getFamilyNumber(
+        digit, 'jodi_group', 'https://rmmatka.com/app/api/get-family-panna');
 
     if (result != null) {
       if (result.error) {
@@ -126,13 +128,8 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
@@ -196,11 +193,11 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               const SizedBox(
-                                height: 6,
+                                height: 4,
                               ),
                               TextFormField(
                                 controller: digitController,
@@ -210,13 +207,17 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter a digit';
                                   }
-
                                   return null;
                                 },
+                                style: const TextStyle(
+                                    fontSize: 12), // Smaller font size
                                 decoration: const InputDecoration(
                                   labelText: 'ENTER DIGIT',
                                   filled: true,
                                   fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8), // Smaller height
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -227,18 +228,18 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 16,
+                                height: 8,
                               ),
                               const Text(
                                 'BID AMOUNT',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               const SizedBox(
-                                height: 6,
+                                height: 4,
                               ),
                               TextFormField(
                                 controller: amountController,
@@ -254,10 +255,15 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
                                   }
                                   return null;
                                 },
+                                style: const TextStyle(
+                                    fontSize: 12), // Smaller font size
                                 decoration: const InputDecoration(
                                   labelText: 'ENTER BID AMOUNT',
                                   filled: true,
                                   fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8), // Smaller height
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -268,7 +274,7 @@ class _InsideFamilyJodiState extends State<InsideFamilyJodi> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 18,
+                                height: 12,
                               ),
                               ElevatedButton(
                                 onPressed: () {

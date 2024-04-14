@@ -11,6 +11,7 @@ import 'package:rm_official_app/widgets/heading_title_widget.dart';
 
 import '../../models/number_data_model.dart';
 import '../../models/today_market_model.dart';
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/sangam_bid_popup_widget.dart';
 
 class InsideSangamScreen extends StatefulWidget {
@@ -75,7 +76,7 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: 'Enter search term',
+                      hintText: 'Search Number',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
@@ -106,7 +107,7 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.all(10.0),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Colors.black,
                                     borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   child: Text(
@@ -209,13 +210,8 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
@@ -280,7 +276,7 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 16),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Colors.black,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -324,7 +320,7 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 16),
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Colors.black,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Row(
@@ -374,8 +370,12 @@ class _InsideSangamScreenState extends State<InsideSangamScreen> {
                                   }
                                   return null;
                                 },
+                                style: const TextStyle(fontSize: 14),
                                 decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
                                   labelText: 'ENTER BID AMOUNT',
+                                  labelStyle: TextStyle(fontSize: 12),
                                   filled: true,
                                   fillColor: Colors.white,
                                   border: OutlineInputBorder(

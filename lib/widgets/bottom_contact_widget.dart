@@ -25,7 +25,7 @@ class _BottomContactState extends State<BottomContact> {
   bool _upiButtonLoading = false;
 
   void fetchContactData() async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/home-page';
+    const apiUrl = 'https://rmmatka.com/app/api/home-page';
 
     setState(() {
       _upiButtonLoading = true;
@@ -63,31 +63,21 @@ class _BottomContactState extends State<BottomContact> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 12),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margin: const EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black),
+        border: Border.all(color: const Color(0xFFFFA201), width: 4),
+        gradient: LinearGradient(
+          colors: [Colors.redAccent.shade700, Colors.orangeAccent.shade700],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
       child: _upiButtonLoading
           ? const CircularProgressIndicator()
           : Column(
               children: [
-                Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.redType),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      phoneNumber,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 22),
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -95,15 +85,14 @@ class _BottomContactState extends State<BottomContact> {
                       onTap: () => open('tel:$phoneNumber'),
                       child: Container(
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 3),
-                          color: Colors.blue,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
                         child: const FaIcon(
                           FontAwesomeIcons.phone,
-                          color: Colors.white,
+                          color: Colors.blue,
+                          size: 40,
                         ),
                       ),
                     ),
@@ -111,26 +100,39 @@ class _BottomContactState extends State<BottomContact> {
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
                         'assets/images/rm_logo.png',
-                        width: 80,
+                        width: 90,
                       ),
                     ),
                     GestureDetector(
                       onTap: () => open('https://wa.me/$whatsAppNumber'),
                       child: Container(
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 3),
-                          color: Colors.green,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
                         child: const FaIcon(
                           FontAwesomeIcons.whatsapp,
-                          color: Colors.white,
+                          color: Colors.green,
+                          size: 40,
                         ),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "For Any Help Regarding Withdrawal Or Deposit Please Contact",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+                Text(
+                  phoneNumber,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryColor),
                 ),
               ],
             ),

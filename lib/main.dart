@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rm_official_app/screens/auth/login_screen.dart';
+import 'package:rm_official_app/screens/auth/register_screen.dart';
 
 import 'const/colors.dart';
 import 'provider/resend_otp_timer_provider.dart';
@@ -45,7 +47,9 @@ class MyApp extends StatelessWidget {
           labelSmall: TextStyle(fontFamily: 'LilitaOne'),
         ),
       ),
-      home: const SendOtpScreen(),
+      home: const LoginScreen(
+        refresh: true,
+      ),
     );
   }
 }

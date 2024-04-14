@@ -9,11 +9,13 @@ import 'package:rm_official_app/screens/game/inside_family_panna.dart';
 import 'package:rm_official_app/screens/game/inside_sangam_screen.dart';
 import 'package:rm_official_app/screens/game/inside_single_akda_screen.dart';
 import 'package:rm_official_app/screens/game/inside_single_panna_screen.dart';
+import 'package:rm_official_app/screens/game/inside_sp_dp_tp_all_panna_screen.dart';
 import 'package:rm_official_app/screens/game/inside_sp_motor_panna_screen.dart';
 import 'package:rm_official_app/screens/game/inside_triple_panna_screen.dart';
 import 'package:rm_official_app/widgets/bottom_contact_widget.dart';
 import 'package:rm_official_app/widgets/heading_logo_widget.dart';
 
+import '../../widgets/app_bar_widget.dart';
 import 'inside_cycle_panna.dart';
 
 class GameCategoryScreen extends StatefulWidget {
@@ -31,13 +33,8 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'CHOOSE CATEGORY',
-          style: TextStyle(color: Colors.white),
-        ),
+      appBar: const AppBarWidget(
+        title: 'CHOOSE CATEGORY',
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -60,7 +57,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                   );
                 },
                 child: Image.asset(
-                  'assets/images/categories/single_akda.jpg',
+                  'assets/images/categories/icons-10.png',
                   width: 120,
                 ),
               ),
@@ -84,7 +81,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                         );
                       },
                       child: Image.asset(
-                        'assets/images/categories/jodi.jpg',
+                        'assets/images/categories/icons-11.png',
                         width: 120,
                       ),
                     ),
@@ -101,7 +98,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/single_panna.jpg',
+                      'assets/images/categories/icons-12.png',
                       width: 120,
                     ),
                   ),
@@ -118,7 +115,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/double_panna.jpg',
+                      'assets/images/categories/icons-13.png',
                       width: 120,
                     ),
                   ),
@@ -143,7 +140,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/triple_panna.jpg',
+                      'assets/images/categories/icons-07.png',
                       width: 120,
                     ),
                   ),
@@ -160,7 +157,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/family_panna.jpg',
+                      'assets/images/categories/icons-08.png',
                       width: 120,
                     ),
                   ),
@@ -178,7 +175,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                         );
                       },
                       child: Image.asset(
-                        'assets/images/categories/family_jodi.jpg',
+                        'assets/images/categories/icons-09.png',
                         width: 120,
                       ),
                     ),
@@ -203,7 +200,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/sp_motor_panna.jpg',
+                      'assets/images/categories/icons-04.png',
                       width: 120,
                     ),
                   ),
@@ -220,7 +217,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/dp_motor_panna.jpg',
+                      'assets/images/categories/icons-05.png',
                       width: 120,
                     ),
                   ),
@@ -237,7 +234,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                       );
                     },
                     child: Image.asset(
-                      'assets/images/categories/cycle_panna.jpg',
+                      'assets/images/categories/icons-06.png',
                       width: 120,
                     ),
                   ),
@@ -249,9 +246,22 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Image.asset(
-                    'assets/images/categories/sp_dp_tp_all_panna.jpg',
-                    width: 120,
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => InsideSPDPTPAllPannaScreen(
+                            title: 'SP-DP-TP-ALL PANNA',
+                            isOpen: widget.isOpen,
+                            market: widget.market,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Image.asset(
+                      'assets/images/categories/icons-03.png',
+                      width: 120,
+                    ),
                   ),
                   if (widget.isOpen == "OPEN")
                     InkWell(
@@ -267,7 +277,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                         );
                       },
                       child: Image.asset(
-                        'assets/images/categories/half_sangam.jpg',
+                        'assets/images/categories/icons-02.png',
                         width: 120,
                       ),
                     ),
@@ -285,7 +295,7 @@ class _GameCategoryScreenState extends State<GameCategoryScreen> {
                         );
                       },
                       child: Image.asset(
-                        'assets/images/categories/full_sangam.jpg',
+                        'assets/images/categories/icons-01.png',
                         width: 120,
                       ),
                     ),

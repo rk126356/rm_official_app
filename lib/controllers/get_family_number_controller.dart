@@ -3,12 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:rm_official_app/models/pana_data_model.dart';
 
-Future<PannaResponse?> getFamilyNumber(int num, String table) async {
-  const String apiUrl = 'https://rmmatka.com/ravan/api/get-family-panna';
-
+Future<PannaResponse?> getFamilyNumber(
+    int num, String table, String api) async {
   try {
     final response = await http.post(
-      Uri.parse(apiUrl),
+      Uri.parse(api),
       body: {
         'number': num.toString(),
         'table': table,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ResendTimerProvider with ChangeNotifier {
   bool isResendVisible = false;
   Timer? resendTimer;
-  late int remainingSeconds;
+  int remainingSeconds = 0;
 
   late Timer _timer;
   int _remainingSeconds = 60;
@@ -54,6 +54,7 @@ class ResendTimerProvider with ChangeNotifier {
   void stopResendTimer() {
     if (resendTimer != null) {
       resendTimer!.cancel();
+
       notifyListeners();
     }
   }

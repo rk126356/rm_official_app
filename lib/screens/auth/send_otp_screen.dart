@@ -55,7 +55,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
       _isOtpError = false;
     });
     if (_phoneNumber.length > 9) {
-      const String apiUrl = 'https://rmmatka.com/ravan/api/send-otp';
+      const String apiUrl = 'https://rmmatka.com/app/api/send-otp';
 
       Map<String, String> body = {
         'mobile': _phoneNumber,
@@ -103,7 +103,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
 
       _isButtonLoading = true;
     });
-    const String apiUrl = 'https://rmmatka.com/ravan/api/resend-otp';
+    const String apiUrl = 'https://rmmatka.com/app/api/resend-otp';
 
     Map<String, dynamic> body = {
       'mobile': _phoneNumber,
@@ -139,7 +139,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
       _isButtonLoading = true;
       _isOtpError = false;
     });
-    const String apiUrl = 'https://rmmatka.com/ravan/api/otp-verify';
+    const String apiUrl = 'https://rmmatka.com/app/api/otp-verify';
 
     Map<String, dynamic> body = {
       'otp': inputOtp,
@@ -196,7 +196,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      const String apiUrl = 'https://rmmatka.com/ravan/api/signup';
+      const String apiUrl = 'https://rmmatka.com/app/api/signup';
 
       Map<String, String> body = {
         'name': _name,
@@ -242,7 +242,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
   }
 
   Future<void> fetchUser(String userId) async {
-    String apiUrl = 'https://rmmatka.com/ravan/api/fetch-profile';
+    String apiUrl = 'https://rmmatka.com/app/api/fetch-profile';
 
     Map<String, String> body = {
       'user_id': userId,
@@ -548,7 +548,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                                           horizontal: 20),
                                       child: Container(
                                         decoration: const BoxDecoration(
-                                          color: AppColors.primaryColor,
+                                          color: Colors.white,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(12)),
                                         ),
@@ -613,8 +613,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                                                       horizontal: 50,
                                                       vertical: 12),
                                               foregroundColor: Colors.white,
-                                              backgroundColor:
-                                                  AppColors.blueType,
+                                              backgroundColor: Colors.white,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12),
@@ -643,7 +642,9 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const LoginScreen(),
+                                                    const LoginScreen(
+                                                  refresh: false,
+                                                ),
                                               ),
                                             );
                                           },

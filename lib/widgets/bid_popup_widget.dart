@@ -9,7 +9,6 @@ import 'package:rm_official_app/controllers/submit_bid_controller.dart';
 import 'package:rm_official_app/models/calculate_bid_model.dart';
 import 'package:rm_official_app/models/today_market_model.dart';
 import 'package:rm_official_app/provider/resend_otp_timer_provider.dart';
-import 'package:rm_official_app/screens/bid/bid_history_screen.dart';
 import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
 import 'package:rm_official_app/widgets/success_snackbar_widget.dart';
 
@@ -111,10 +110,12 @@ class _BidPopupWidgetState extends State<BidPopupWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // **Header**
-              Text(
-                '${widget.market.marketName} - ${widget.isOpen}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              Center(
+                child: Text(
+                  '${widget.market.marketName} - ${widget.isOpen}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 24),
+                ),
               ),
               const SizedBox(height: 10),
               Text(
@@ -159,9 +160,12 @@ class _BidPopupWidgetState extends State<BidPopupWidget> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(widget.title == 'jodi digit'
-                                    ? bid.sNo.toString().padLeft(2, '0')
-                                    : bid.sNo.toString()),
+                                child: Text(widget.title == 'TRIPAL PANNA' &&
+                                        bid.sNo == 0
+                                    ? 'OOO'
+                                    : widget.title == 'JODI DIGIT'
+                                        ? bid.sNo.toString().padLeft(2, '0')
+                                        : bid.sNo.toString()),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),

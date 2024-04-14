@@ -6,7 +6,7 @@ import '../models/bid_history_model.dart';
 Future<List<BidHistory>> fetchHistory(String userId, String startDate,
     String endDate, String type, String table, String gameType) async {
   final response = await http.post(
-    Uri.parse('https://rmmatka.com/ravan/api/history'),
+    Uri.parse('https://rmmatka.com/app/api/history'),
     body: {
       'user_id': userId,
       'start_date': startDate,
@@ -19,7 +19,7 @@ Future<List<BidHistory>> fetchHistory(String userId, String startDate,
 
   if (response.statusCode == 200) {
     final dynamic responseData = json.decode(response.body)['data'];
-
+    print(responseData);
     if (responseData != null) {
       final List<dynamic> jsonData = responseData;
 

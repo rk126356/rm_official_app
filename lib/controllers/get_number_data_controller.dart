@@ -6,10 +6,10 @@ import '../models/number_data_model.dart';
 Future<NumberDataModel?> getNumberData(
   bool isHalf,
 ) async {
-  String url = 'https://rmmatka.com/ravan/api/full-sangam';
+  String url = 'https://rmmatka.com/app/api/full-sangam';
 
   if (isHalf) {
-    url = 'https://rmmatka.com/ravan/api/half-sangam';
+    url = 'https://rmmatka.com/app/api/half-sangam';
   }
 
   try {

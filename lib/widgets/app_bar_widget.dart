@@ -16,29 +16,39 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     return AppBar(
-      centerTitle: true,
       actions: [
-        ElevatedButton.icon(
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor: MaterialStateProperty.all(AppColors.redType),
+        if (userProvider.user.onWallet != '0')
+          ElevatedButton.icon(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(AppColors.redType),
+            ),
+            onPressed: () {},
+            icon: const Icon(
+              Icons.wallet,
+              color: Colors.white,
+            ),
+            label: Text(
+              userProvider.user.balance.toString(),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.wallet,
-            color: Colors.white,
-          ),
-          label: Text(
-            userProvider.user.balance.toString(),
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
       ],
       iconTheme: const IconThemeData(color: Colors.white),
-      title: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          Text(
+            'USER: ${userProvider.user.name}',
+            textAlign: TextAlign.left,
+            style: const TextStyle(color: Colors.white, fontSize: 10),
+          ),
+        ],
       ),
       backgroundColor: AppColors.redType,
     );

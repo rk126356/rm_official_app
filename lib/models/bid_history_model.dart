@@ -33,6 +33,7 @@ class BidHistory {
   String leftDigit;
   String rightDigit;
   bool deleteStatus;
+  String category;
 
   BidHistory({
     required this.bidId,
@@ -69,6 +70,7 @@ class BidHistory {
     required this.leftDigit,
     required this.rightDigit,
     required this.deleteStatus,
+    required this.category,
   });
 
   factory BidHistory.fromJson(Map<String, dynamic> json) {
@@ -107,6 +109,7 @@ class BidHistory {
       leftDigit: json['left_digit'] ?? '',
       rightDigit: json['right_digit'] ?? '',
       deleteStatus: json['delete_status'] ?? false,
+      category: json['game_category'] ?? '',
     );
   }
 }

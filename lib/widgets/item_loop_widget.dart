@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rm_official_app/models/today_market_model.dart';
 
+import '../provider/user_provider.dart';
 import '../screens/bid/chart_screen.dart';
 import '../screens/game/game_category_screen.dart';
 import 'error_snackbar_widget.dart';
@@ -15,6 +17,7 @@ class ItemLoop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     void showPopup(BuildContext context) {
       showDialog(
         context: context,
@@ -122,47 +125,54 @@ class ItemLoop extends StatelessWidget {
                 color: const Color.fromARGB(255, 69, 1, 255), width: 2)),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    color: Colors.red,
-                    child: Text(
-                      market.timeLeftOpenTime,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w500,
+            if (userProvider.user.onWallet != '0')
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      color: Colors.red,
+                      child: Text(
+                        market.isHoliday != '0'
+                            ? 'TODAY IS HOLIDAY'
+                            : market.timeLeftOpenTime,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    color: Colors.green,
-                    child: Text(
-                      market.timeLeftCloseTime,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w500,
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      color: Colors.green,
+                      child: Text(
+                        market.isHoliday != '0'
+                            ? 'TODAY IS HOLIDAY'
+                            : market.timeLeftCloseTime,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             Container(
               color: Colors.white,
               padding: const EdgeInsets.all(22),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: userProvider.user.onWallet != '0'
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.spaceAround,
                 children: [
                   InkWell(
                     onTap: () {
@@ -195,40 +205,42 @@ class ItemLoop extends StatelessWidget {
                         market.marketName,
                         style: const TextStyle(
                           color: Color.fromARGB(255, 228, 114, 188),
-                          fontSize: 24,
+                          fontSize: 23,
                         ),
                       ),
                       Text(
                         market.number,
                         style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
+                            const TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      if (market.isOpen) {
-                        showPopup(context);
-                      } else {
-                        showCoolErrorSnackbar(context, 'Market is closed');
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          market.isOpen
-                              ? 'assets/images/gifs/play_icon.gif'
-                              : 'assets/images/gifs/close_icon.gif',
-                          height: 55,
-                        ),
-                        Text(
-                          market.isOpen ? 'PLAY' : 'CLOSED',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w900, color: Colors.black),
-                        )
-                      ],
+                  if (userProvider.user.onWallet != '0')
+                    InkWell(
+                      onTap: () {
+                        if (market.isOpen) {
+                          showPopup(context);
+                        } else {
+                          showCoolErrorSnackbar(context, 'Market is closed');
+                        }
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            market.isOpen
+                                ? 'assets/images/gifs/play_icon.gif'
+                                : 'assets/images/gifs/close_icon.gif',
+                            height: 55,
+                          ),
+                          Text(
+                            market.isOpen ? 'PLAY' : 'CLOSED',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                color: Colors.black),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

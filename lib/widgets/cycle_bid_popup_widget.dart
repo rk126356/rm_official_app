@@ -65,6 +65,7 @@ class _CycleBidPopupState extends State<CycleBidPopup> {
         userId: userProvider.user.id,
         api: widget.api,
         type: widget.type,
+        title: widget.title,
       );
 
       if (kDebugMode) {
@@ -115,10 +116,12 @@ class _CycleBidPopupState extends State<CycleBidPopup> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // **Header**
-              Text(
-                '${widget.market.marketName} - ${widget.isOpen}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              Center(
+                child: Text(
+                  '${widget.market.marketName} - ${widget.isOpen}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 24),
+                ),
               ),
               const SizedBox(height: 10),
               Text(

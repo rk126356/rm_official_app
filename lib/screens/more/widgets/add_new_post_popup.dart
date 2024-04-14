@@ -84,7 +84,7 @@ Future<void> addNewPost(context, String text, ForumPost? parentPostId) async {
 
   Map<String, dynamic> postData = {
     'name': userProvider.user.name,
-    'image': userProvider.user.image,
+    'image': 'https://rmmatka.com/app/${userProvider.user.image}',
     'message': text,
     'postId': postId,
     'createTime': Timestamp.now(),
@@ -102,7 +102,7 @@ Future<void> addNewPost(context, String text, ForumPost? parentPostId) async {
       'isReply': true,
       'replyPostId': parentPostId.postId,
       'repliedByName': userProvider.user.name,
-      'repliedByImage': userProvider.user.image,
+      'repliedByImage': 'https://rmmatka.com/app/${userProvider.user.image}',
       'repliedByMessage': text,
       'repliedByCreateTime': Timestamp.now(),
     });

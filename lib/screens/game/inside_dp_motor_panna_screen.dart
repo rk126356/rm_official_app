@@ -1,13 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rm_official_app/const/colors.dart';
 import 'package:rm_official_app/widgets/fade_red_heading_widget.dart';
 import 'package:rm_official_app/widgets/heading_title_widget.dart';
 
+import '../../controllers/get_family_number_controller.dart';
 import '../../models/family_bid_model.dart';
+import '../../models/pana_data_model.dart';
 import '../../models/today_market_model.dart';
-import '../../widgets/cycle_bid_popup_widget.dart';
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/error_snackbar_widget.dart';
+import '../../widgets/show_family_popup_widget.dart';
 
 class InsideDPMotorPanna extends StatefulWidget {
   const InsideDPMotorPanna({
@@ -39,13 +44,13 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
     }
     showDialog(
       context: context,
-      builder: (_) => CycleBidPopup(
+      builder: (_) => BidFamilyPopup(
         total: total,
         allBids: allBids,
         market: widget.market,
         isOpen: widget.isOpen,
         title: widget.title,
-        api: 'https://rmmatka.com/ravan/api/spdp-motor-bids',
+        api: 'https://rmmatka.com/app/api/spdp-motor-bids',
         type: 'double',
       ),
     );
@@ -54,55 +59,61 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
   Future<void> addBids({required int amount, required int digit}) async {
     total = 0;
 
-    final bid = FamilyBids(
-      digit: digit,
-      amount: amount,
-    );
+    final result = await getFamilyNumber(
+        digit, 'dp_motor_panna', 'https://rmmatka.com/app/api/get-spdp-panna');
+    if (result != null) {
+      if (result.error) {
+        showCoolErrorSnackbar(context, result.message);
+        return;
+      }
 
-    allBids.removeWhere((data) => data.digit == bid.digit);
-    print(bid.digit);
-    setState(() {
-      allBids.add(bid);
-    });
+      final bid = FamilyBids(digit: digit, amount: amount, data: result.data);
 
-    checkTotal();
+      allBids.removeWhere((data) => data.digit == bid.digit);
+
+      setState(() {
+        allBids.add(bid);
+      });
+
+      checkTotal();
+    } else {
+      showCoolErrorSnackbar(context, 'Invalid Number');
+    }
   }
 
   void checkTotal() {
     total = 0;
-    print(allBids.length);
+
     for (int i = 0; i < allBids.length; i++) {
       final bidsx = allBids[i];
 
-      total += bidsx.amount;
+      List<SingleBids> all = [];
+      if (bidsx.data != null) {
+        for (int j = 0; j < bidsx.data!.length; j++) {
+          final b = bidsx.data![j];
+          total += bidsx.amount;
+          final bid = SingleBids(
+              type: 'panna', number: b.pana, bidPoint: bidsx.amount.toString());
+          // print(bid.toJson());
+          all.add(bid);
+        }
+      }
 
-      // List<SingleBids> all = [];
-      // if (bidsx.data != null) {
-      //   for (int j = 0; j < bidsx.data!.length; j++) {
-      //     final b = bidsx.data![j];
-      //     total += bidsx.amount;
-      //     final bid = SingleBids(
-      //         type: 'panna', number: b.pana, bidPoint: bidsx.amount.toString());
-      //     // print(bid.toJson());
-      //     all.add(bid);
-      //   }
-      // }
-
-      // if (bidsx.digit == allBids[i].digit) {
-      //   allBids[i].bids = all;
-      // }
+      if (bidsx.digit == allBids[i].digit) {
+        allBids[i].bids = all;
+      }
     }
 
     setState(() {});
   }
 
-  // void createBid(
-  //     int sNo, int value, List<SingleBids> bids, List<PanaData> data) {
-  //   final b = FamilyBids(amount: value, digit: sNo, bids: bids, data: data);
-  //   allBids.removeWhere((bid) => bid.digit == sNo);
-  //   allBids.add(b);
-  //   setState(() {});
-  // }
+  void createBid(
+      int sNo, int value, List<SingleBids> bids, List<PanaData> data) {
+    final b = FamilyBids(amount: value, digit: sNo, bids: bids, data: data);
+    allBids.removeWhere((bid) => bid.digit == sNo);
+    allBids.add(b);
+    setState(() {});
+  }
 
   void removeBid(int index) {
     setState(() {
@@ -116,13 +127,8 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
@@ -186,27 +192,31 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               const SizedBox(
-                                height: 6,
+                                height: 4,
                               ),
                               TextFormField(
                                 controller: digitController,
                                 maxLength: 9,
                                 keyboardType: TextInputType.number,
                                 validator: (value) {
-                                  if (value == null || value.length < 5) {
-                                    return 'Please enter a 5-9 digit number';
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a digit';
                                   }
-
                                   return null;
                                 },
+                                style: const TextStyle(
+                                    fontSize: 12), // Smaller font size
                                 decoration: const InputDecoration(
                                   labelText: 'ENTER DIGIT',
                                   filled: true,
                                   fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8), // Smaller height
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -217,18 +227,18 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 16,
+                                height: 8,
                               ),
                               const Text(
                                 'BID AMOUNT',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               const SizedBox(
-                                height: 6,
+                                height: 4,
                               ),
                               TextFormField(
                                 controller: amountController,
@@ -244,10 +254,15 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
                                   }
                                   return null;
                                 },
+                                style: const TextStyle(
+                                    fontSize: 12), // Smaller font size
                                 decoration: const InputDecoration(
                                   labelText: 'ENTER BID AMOUNT',
                                   filled: true,
                                   fillColor: Colors.white,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8), // Smaller height
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.black,
@@ -258,7 +273,7 @@ class _InsideDPMotorPannaState extends State<InsideDPMotorPanna> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 18,
+                                height: 12,
                               ),
                               ElevatedButton(
                                 onPressed: () {

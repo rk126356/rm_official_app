@@ -6,14 +6,17 @@ import 'package:rm_official_app/widgets/bottom_contact_widget.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/forum_post_model.dart';
+import '../../widgets/app_bar_widget.dart';
+import '../navigation/drawer_nav_bar.dart';
 import 'widgets/add_new_post_popup.dart';
 import 'widgets/build_posts_box_widget.dart';
 
 class ForumScreen extends StatefulWidget {
-  const ForumScreen({Key? key}) : super(key: key);
+  const ForumScreen({Key? key, required this.isRoute}) : super(key: key);
 
   @override
   State<ForumScreen> createState() => _ForumScreenState();
+  final bool isRoute;
 }
 
 class _ForumScreenState extends State<ForumScreen> {
@@ -44,13 +47,9 @@ class _ForumScreenState extends State<ForumScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'Forums',
-          style: TextStyle(color: Colors.white),
-        ),
+      drawer: widget.isRoute ? null : const NavBar(),
+      appBar: const AppBarWidget(
+        title: 'FORUMS',
       ),
       body: StreamBuilder(
         stream: postsCollection

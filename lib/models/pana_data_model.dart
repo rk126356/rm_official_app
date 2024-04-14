@@ -30,7 +30,7 @@ class PanaData {
 
   factory PanaData.fromJson(Map<String, dynamic> json) {
     return PanaData(
-      pana: json['pana'],
+      pana: json['pana'].toString(),
     );
   }
 }

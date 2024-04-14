@@ -12,6 +12,7 @@ import 'package:rm_official_app/widgets/loading_overlay_widget.dart';
 
 import '../../provider/user_provider.dart';
 import '../../widgets/error_snackbar_widget.dart';
+import '../navigation/bottom_navigation.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key, required this.otp, required this.mobile});
@@ -32,7 +33,7 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {
       _isLoading = true;
     });
-    const String apiUrl = 'https://rmmatka.com/ravan/api/resend-otp';
+    const String apiUrl = 'https://rmmatka.com/app/api/resend-otp';
 
     Map<String, dynamic> body = {
       'mobile': widget.mobile,
@@ -64,7 +65,7 @@ class _OtpScreenState extends State<OtpScreen> {
     setState(() {
       _isLoading = true;
     });
-    const String apiUrl = 'https://rmmatka.com/ravan/api/otp-verify';
+    const String apiUrl = 'https://rmmatka.com/app/api/otp-verify';
 
     Map<String, dynamic> body = {
       'otp': inputOtp,
@@ -79,8 +80,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
       final Map<String, dynamic> data = json.decode(response.body);
 
-      user = UserModel.fromJson(data['data']);
       if (data['error'] == false) {
+        user = UserModel.fromJson(data['data']);
         success();
       } else {
         // ignore: use_build_context_synchronously
@@ -91,25 +92,27 @@ class _OtpScreenState extends State<OtpScreen> {
         print('Error: $e');
       }
     }
-    _isLoading = false;
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void success() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.setUser(user);
     userProvider.setIsLoggedIn(true);
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => RegisterScreen(
-          mobile: widget.mobile,
-        ),
+        builder: (context) => const NavigationBarApp(),
       ),
+      (route) => false,
     );
   }
 
   @override
   void initState() {
     super.initState();
+    _resendOtp();
     otp = widget.otp;
   }
 
@@ -135,7 +138,7 @@ class _OtpScreenState extends State<OtpScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(otp),
+          // Text(otp),
           const Text(
             'Enter the OTP sent to your mobile number',
             style: TextStyle(fontSize: 16),

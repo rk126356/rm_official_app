@@ -6,6 +6,7 @@ import 'package:rm_official_app/models/today_market_model.dart';
 import 'package:rm_official_app/widgets/bid_popup_widget.dart';
 import 'package:rm_official_app/widgets/heading_title_widget.dart';
 
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/error_snackbar_widget.dart';
 import '../../widgets/fade_red_heading_widget.dart';
 
@@ -56,80 +57,78 @@ class _InsideTriplePannaState extends State<InsideTriplePanna> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      backgroundColor: AppColors.primaryColor,
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Center(
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 18,
-                    ),
-                    FadeRedHeading(
-                      title: widget.title == 'SINGLE DIGIT'
-                          ? 'SINGLE AKDA'
-                          : widget.title,
-                    ),
-                    const SizedBox(
-                      height: 22,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                          color: AppColors.blueType,
-                          borderRadius: BorderRadius.all(Radius.circular(6))),
-                      child: Text(
-                        DateFormat('dd-MMM-yyyy')
-                            .format(DateTime.now())
-                            .toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      FadeRedHeading(
+                        title: widget.title == 'SINGLE DIGIT'
+                            ? 'SINGLE AKDA'
+                            : widget.title,
+                      ),
+                      const SizedBox(
+                        height: 22,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: const BoxDecoration(
+                            color: AppColors.blueType,
+                            borderRadius: BorderRadius.all(Radius.circular(6))),
+                        child: Text(
+                          DateFormat('dd-MMM-yyyy')
+                              .format(DateTime.now())
+                              .toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                    HeadingTitle(
-                        title:
-                            '${widget.market.marketName}\n(${widget.isOpen})'),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildInputField(('777').toString(), 777),
-                          _buildInputField(('444').toString(), 444),
-                          _buildInputField(('111').toString(), 111),
-                          _buildInputField(('888').toString(), 888),
-                          _buildInputField(('555').toString(), 555),
-                        ]),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildInputField(('222').toString(), 222),
-                          _buildInputField(('999').toString(), 999),
-                          _buildInputField(('666').toString(), 666),
-                          _buildInputField(('333').toString(), 333),
-                          _buildInputField(('000').toString(), 000),
-                        ]),
-                  ],
+                      const SizedBox(
+                        height: 18,
+                      ),
+                      HeadingTitle(
+                          title:
+                              '${widget.market.marketName}\n(${widget.isOpen})'),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildInputField(('777').toString(), 777),
+                            _buildInputField(('444').toString(), 444),
+                            _buildInputField(('111').toString(), 111),
+                            _buildInputField(('888').toString(), 888),
+                            _buildInputField(('555').toString(), 555),
+                          ]),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildInputField(('222').toString(), 222),
+                            _buildInputField(('999').toString(), 999),
+                            _buildInputField(('666').toString(), 666),
+                            _buildInputField(('333').toString(), 333),
+                            _buildInputField(('000').toString(), 000),
+                          ]),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -232,7 +231,7 @@ class _InsideTriplePannaState extends State<InsideTriplePanna> {
           height: 40,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 1),
-            color: AppColors.primaryColor,
+            color: AppColors.backgroundColor,
             borderRadius: BorderRadius.circular(6),
           ),
           child: TextField(

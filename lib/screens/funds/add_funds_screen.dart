@@ -12,6 +12,7 @@ import 'package:rm_official_app/widgets/heading_logo_widget.dart';
 import 'package:http/http.dart' as http;
 
 import '../../provider/user_provider.dart';
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/success_snackbar_widget.dart';
 import '../navigation/bottom_navigation.dart';
 
@@ -33,19 +34,17 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   String? selectedPaymentMethod;
   int amount = 0;
   bool _isButtonLoading = false;
-  int minimumDeposit = 10;
+  int minimumDeposit = 500;
   String merchantId = '';
   String merchantName = '';
+  String phoneNumber = '';
 
   List<PaymentMethod> paymentMethods = [
-    PaymentMethod(name: 'PAYTM', imagePath: 'assets/images/paytm.png'),
-    PaymentMethod(name: 'PHONEPE', imagePath: 'assets/images/phonepe.png'),
-    PaymentMethod(name: 'GPAY', imagePath: 'assets/images/gpay.png'),
-    PaymentMethod(name: 'OTHERS', imagePath: 'assets/images/other_upi.png'),
+    PaymentMethod(name: 'UPI', imagePath: 'assets/images/other_upi.png'),
   ];
 
   void fetchWalletSettings() async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/wallet-setting';
+    const apiUrl = 'https://rmmatka.com/app/api/wallet-setting';
 
     setState(() {
       _isButtonLoading = true;
@@ -73,7 +72,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   }
 
   void fetchUpiSettings() async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/upi-setting';
+    const apiUrl = 'https://rmmatka.com/app/api/upi-setting';
 
     setState(() {
       _isButtonLoading = true;
@@ -103,7 +102,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   }
 
   Future<void> addBalanceApi(String amount, String merchant) async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/add-balance';
+    const apiUrl = 'https://rmmatka.com/app/api/add-balance';
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
@@ -138,7 +137,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
 
   Future<void> addBalance() async {
     if (amount < minimumDeposit) {
-      showCoolErrorSnackbar(context, 'Minimum amount is 500');
+      showCoolErrorSnackbar(context, 'Minimum amount is $minimumDeposit');
       return;
     }
     if (selectedPaymentMethod != null) {
@@ -172,24 +171,43 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
     }
   }
 
+  void fetchContactData() async {
+    const apiUrl = 'https://rmmatka.com/app/api/home-page';
+
+    try {
+      var response = await http.get(
+        Uri.parse(apiUrl),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        if (data['error'] == false) {
+          setState(() {
+            phoneNumber = data['data']['contact']['contact_no'];
+          });
+        }
+      } else {
+        showCoolSuccessSnackbar(context, 'Error: No network available');
+      }
+    } catch (e) {
+      showCoolSuccessSnackbar(context, 'Error: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     fetchWalletSettings();
     fetchUpiSettings();
+    fetchContactData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: AppColors.redType,
-        title: const Text(
-          'Add Funds',
-          style: TextStyle(color: Colors.white),
-        ),
+      appBar: const AppBarWidget(
+        title: 'ADD FUNDS',
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -199,6 +217,52 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      color: AppColors.opBlueType,
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        phoneNumber.isEmpty
+                            ? const CircularProgressIndicator()
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.phone,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text(
+                                    'For assistance, contact: ',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    phoneNumber,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Deposit range: ₹$minimumDeposit - ₹10,000.\nFor amounts exceeding ₹10,000, please contact us on WhatsApp.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 14,
+                  ),
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 16),

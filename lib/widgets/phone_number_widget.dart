@@ -20,11 +20,11 @@ class PhoneNumber extends StatefulWidget {
 }
 
 class _PhoneNumberState extends State<PhoneNumber> {
-  String phoneNumber = '8719817314';
-  String whatsAppNumber = '+918719817314';
+  String phoneNumber = '';
+  String whatsAppNumber = '';
 
   void fetchContactData() async {
-    const apiUrl = 'https://rmmatka.com/ravan/api/home-page';
+    const apiUrl = 'https://rmmatka.com/app/api/home-page';
 
     try {
       var response = await http.get(
@@ -73,18 +73,21 @@ class _PhoneNumberState extends State<PhoneNumber> {
           ),
         ),
         Container(
-          width: 250,
+          width: 220,
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.redType),
             color: Colors.white,
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              phoneNumber,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-            ),
+            child: phoneNumber.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : Text(
+                    phoneNumber,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
           ),
         ),
         GestureDetector(

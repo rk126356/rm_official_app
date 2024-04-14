@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 void fetchBalance(context) async {
   final userProvider = Provider.of<UserProvider>(context, listen: false);
-  String apiUrl = 'https://rmmatka.com/ravan/api/amount';
+  String apiUrl = 'https://rmmatka.com/app/api/amount';
   Map<String, String> body = {
     'user_id': userProvider.user.id,
   };

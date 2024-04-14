@@ -5,7 +5,7 @@ import '../models/chart_model.dart';
 
 Future<List<ChartItem>> fetchChartData(String marketId, String year) async {
   final response = await http
-      .post(Uri.parse('https://rmmatka.com/ravan/api/get-chart'), body: {
+      .post(Uri.parse('https://rmmatka.com/app/api/get-chart'), body: {
     'market_id': marketId,
     'year': year,
   });

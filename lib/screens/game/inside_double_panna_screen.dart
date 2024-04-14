@@ -6,6 +6,7 @@ import 'package:rm_official_app/models/today_market_model.dart';
 import 'package:rm_official_app/widgets/bid_popup_widget.dart';
 import 'package:rm_official_app/widgets/heading_title_widget.dart';
 
+import '../../widgets/app_bar_widget.dart';
 import '../../widgets/error_snackbar_widget.dart';
 import '../../widgets/fade_red_heading_widget.dart';
 
@@ -56,14 +57,9 @@ class _InsideDoublePannaState extends State<InsideDoublePanna> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.redType,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-        ),
+      backgroundColor: AppColors.primaryColor,
+      appBar: AppBarWidget(
+        title: widget.title,
       ),
       body: Column(
         children: [
@@ -156,6 +152,125 @@ class _InsideDoublePannaState extends State<InsideDoublePanna> {
                           _buildInputField(('144').toString(), 144),
                           _buildInputField(('226').toString(), 226),
                         ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('155').toString(), 155),
+                          _buildInputField(('228').toString(), 228),
+                          _buildInputField(('300').toString(), 300),
+                          _buildInputField(('266').toString(), 266),
+                          _buildInputField(('177').toString(), 177),
+                          _buildInputField(('277').toString(), 277),
+                          _buildInputField(('188').toString(), 188),
+                          _buildInputField(('233').toString(), 233),
+                          _buildInputField(('199').toString(), 199),
+                          _buildInputField(('244').toString(), 244),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('227').toString(), 119),
+                          _buildInputField(('255').toString(), 255),
+                          _buildInputField(('337').toString(), 337),
+                          _buildInputField(('338').toString(), 338),
+                          _buildInputField(('339').toString(), 339),
+                          _buildInputField(('330').toString(), 330),
+                          _buildInputField(('223').toString(), 223),
+                          _buildInputField(('288').toString(), 288),
+                          _buildInputField(('225').toString(), 225),
+                          _buildInputField(('299').toString(), 299),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('335').toString(), 335),
+                          _buildInputField(('336').toString(), 336),
+                          _buildInputField(('355').toString(), 355),
+                          _buildInputField(('400').toString(), 400),
+                          _buildInputField(('366').toString(), 366),
+                          _buildInputField(('448').toString(), 448),
+                          _buildInputField(('377').toString(), 377),
+                          _buildInputField(('440').toString(), 440),
+                          _buildInputField(('388').toString(), 388),
+                          _buildInputField(('334').toString(), 334),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('344').toString(), 344),
+                          _buildInputField(('499').toString(), 499),
+                          _buildInputField(('445').toString(), 445),
+                          _buildInputField(('446').toString(), 446),
+                          _buildInputField(('447').toString(), 447),
+                          _buildInputField(('466').toString(), 466),
+                          _buildInputField(('449').toString(), 449),
+                          _buildInputField(('477').toString(), 477),
+                          _buildInputField(('559').toString(), 559),
+                          _buildInputField(('488').toString(), 488),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('399').toString(), 399),
+                          _buildInputField(('660').toString(), 660),
+                          _buildInputField(('599').toString(), 599),
+                          _buildInputField(('455').toString(), 455),
+                          _buildInputField(('500').toString(), 500),
+                          _buildInputField(('556').toString(), 556),
+                          _buildInputField(('557').toString(), 557),
+                          _buildInputField(('558').toString(), 558),
+                          _buildInputField(('577').toString(), 577),
+                          _buildInputField(('550').toString(), 550),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('588').toString(), 588),
+                          _buildInputField(('688').toString(), 688),
+                          _buildInputField(('779').toString(), 779),
+                          _buildInputField(('699').toString(), 699),
+                          _buildInputField(('799').toString(), 799),
+                          _buildInputField(('880').toString(), 880),
+                          _buildInputField(('566').toString(), 566),
+                          _buildInputField(('800').toString(), 800),
+                          _buildInputField(('667').toString(), 667),
+                          _buildInputField(('668').toString(), 668),
+                        ]),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildInputField(('669').toString(), 669),
+                          _buildInputField(('778').toString(), 778),
+                          _buildInputField(('788').toString(), 788),
+                          _buildInputField(('770').toString(), 770),
+                          _buildInputField(('889').toString(), 889),
+                          _buildInputField(('899').toString(), 899),
+                          _buildInputField(('700').toString(), 700),
+                          _buildInputField(('990').toString(), 990),
+                          _buildInputField(('900').toString(), 900),
+                          _buildInputField(('677').toString(), 677),
+                        ]),
                   ],
                 ),
               ),
@@ -236,8 +351,8 @@ class _InsideDoublePannaState extends State<InsideDoublePanna> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 38,
-          height: 38,
+          width: 36,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1),
             color: Colors.red,
@@ -248,27 +363,30 @@ class _InsideDoublePannaState extends State<InsideDoublePanna> {
             child: Text(
               heading.padLeft(2, '0'),
               style: const TextStyle(
-                fontSize: 10,
+                fontSize: 8,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
-        const SizedBox(height: 3),
+        const SizedBox(height: 1),
         Container(
-          width: 38,
-          height: 38,
+          width: 36,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 1),
-            color: AppColors.primaryColor,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(6),
           ),
           child: TextField(
             maxLength: 5,
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black, fontSize: 10),
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 8,
+            ),
             onChanged: (value) {
               createBid(index, int.tryParse(value) ?? 0);
               setState(() {
@@ -292,8 +410,8 @@ class _InsideDoublePannaState extends State<InsideDoublePanna> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: 38,
-          height: 38,
+          width: 36,
+          height: 32,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 1),
             color: const Color.fromARGB(255, 54, 143, 244),

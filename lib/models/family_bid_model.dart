@@ -3,12 +3,14 @@ import 'pana_data_model.dart';
 class FamilyBids {
   int digit;
   int amount;
+  String? type;
   List<SingleBids>? bids;
   List<PanaData>? data;
 
   FamilyBids({
     required this.digit,
     required this.amount,
+    this.type,
     this.bids,
     this.data,
   });

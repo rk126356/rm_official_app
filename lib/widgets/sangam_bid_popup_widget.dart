@@ -5,12 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rm_official_app/const/colors.dart';
-import 'package:rm_official_app/controllers/submit_bid_controller.dart';
 import 'package:rm_official_app/controllers/submit_sangam_bid_controller.dart';
-import 'package:rm_official_app/models/calculate_bid_model.dart';
 import 'package:rm_official_app/models/sangam_bid_model.dart';
 import 'package:rm_official_app/models/today_market_model.dart';
-import 'package:rm_official_app/screens/bid/bid_history_screen.dart';
 import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
 import 'package:rm_official_app/widgets/success_snackbar_widget.dart';
 
@@ -110,10 +107,12 @@ class _SangamBidPopupState extends State<SangamBidPopup> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // **Header**
-              Text(
-                '${widget.market.marketName} - ${widget.isOpen}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              Center(
+                child: Text(
+                  '${widget.market.marketName} - ${widget.isOpen}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 24),
+                ),
               ),
               const SizedBox(height: 10),
               Text(
@@ -139,11 +138,15 @@ class _SangamBidPopupState extends State<SangamBidPopup> {
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text('SNO'),
+                              child: Text('OPEN'),
                             ),
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text('BET AMOUNT'),
+                              child: Text('CLOSE'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('AMOUNT'),
                             ),
                           ],
                         ),
@@ -161,6 +164,10 @@ class _SangamBidPopupState extends State<SangamBidPopup> {
                                   child: Text(
                                       bid.open.toString().padLeft(2, '0'))),
                               Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      bid.close.toString().padLeft(2, '0'))),
+                              Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text('${bid.betAmount}'),
                               ),
@@ -176,7 +183,7 @@ class _SangamBidPopupState extends State<SangamBidPopup> {
                           children: [
                             const Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: Text('Total'),
+                              child: Text('TOTAL AMOUNT'),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),

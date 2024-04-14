@@ -2,21 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rm_official_app/const/colors.dart';
+import 'package:rm_official_app/widgets/bottom_contact_widget.dart';
 import 'package:rm_official_app/widgets/error_snackbar_widget.dart';
+import 'package:rm_official_app/widgets/heading_logo_widget.dart';
 
 import '../../models/polls_model.dart';
 import '../../provider/user_provider.dart';
 
 class InsidePollsScreen extends StatefulWidget {
   const InsidePollsScreen(
-      {Key? key, required this.status, required this.name, this.revealed})
+      {Key? key,
+      required this.status,
+      required this.name,
+      required this.revealed})
       : super(key: key);
 
   final String status;
   final String name;
-  final bool? revealed;
+  final bool revealed;
 
   @override
   State<InsidePollsScreen> createState() => _InsidePollsScreenState();
@@ -148,7 +154,7 @@ class _InsidePollsScreenState extends State<InsidePollsScreen> {
       backgroundColor: AppColors.primaryColor,
       appBar: AppBar(
         backgroundColor: AppColors.redType,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Poll: ${widget.name} - ${widget.status.toUpperCase()}',
           style: const TextStyle(color: Colors.white),
@@ -157,6 +163,25 @@ class _InsidePollsScreenState extends State<InsidePollsScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const HeadingLogo(),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                color: AppColors.blueType,
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+              ),
+              child: Text(
+                DateFormat('dd-MMM-yyyy').format(DateTime.now()).toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
             _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _isReveled
@@ -164,6 +189,7 @@ class _InsidePollsScreenState extends State<InsidePollsScreen> {
                     : isUserVoted
                         ? buildPollResults()
                         : buildPollOptions(),
+            const BottomContact()
           ],
         ),
       ), // Display poll options
@@ -208,12 +234,11 @@ class _InsidePollsScreenState extends State<InsidePollsScreen> {
                     ),
                     const SizedBox(height: 10),
                     Column(
-                      children: List<int>.generate(
-                              10, (index) => index == 9 ? 0 : index + 1)
-                          .map((entry) {
+                      children:
+                          List<int>.generate(10, (index) => index).map((entry) {
                         return RadioListTile<int>(
                           title: Text(
-                            '$entry',
+                            '${entry < 9 ? entry + 1 : 0}',
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -304,7 +329,7 @@ class _InsidePollsScreenState extends State<InsidePollsScreen> {
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  '${entry.key}:',
+                                  '${entry.key < 9 ? entry.key + 1 : 0}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,

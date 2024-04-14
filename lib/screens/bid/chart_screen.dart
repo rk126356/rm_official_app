@@ -26,6 +26,8 @@ class _ChartScreenState extends State<ChartScreen> {
   bool _isLoading = false;
   String selectedYear = '2024';
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -50,9 +52,44 @@ class _ChartScreenState extends State<ChartScreen> {
     });
   }
 
+  // Scroll listener to show/hide floating buttons based on scroll position
+  void _scrollListener() {
+    setState(() {
+      // Implement logic to show/hide buttons based on scroll position
+    });
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+  }
+
+  void _scrollToBottom() {
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    _scrollController.animateTo(maxScroll,
+        duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: _scrollToTop,
+            tooltip: 'Scroll to Top',
+            child: const Icon(Icons.keyboard_arrow_up),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            onPressed: _scrollToBottom,
+            tooltip: 'Scroll to Bottom',
+            child: const Icon(Icons.keyboard_arrow_down),
+          ),
+        ],
+      ),
       backgroundColor: AppColors.primaryColor,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -61,17 +98,22 @@ class _ChartScreenState extends State<ChartScreen> {
           'Chart Screen',
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: _fetchChartData, icon: const Icon(Icons.refresh))
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   const HeadingLogo(),
                   const SizedBox(
                     height: 22,
                   ),
-                  HeadingTitle(title: widget.marketName),
+                  HeadingTitle(title: '${widget.marketName} CHART'),
                   const SizedBox(
                     height: 22,
                   ),
@@ -95,21 +137,45 @@ class _ChartScreenState extends State<ChartScreen> {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        color: AppColors.pinkType,
+        height: 80,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ListTile(
-              title: Text('Week ${index + 1}'),
-              subtitle: Text('${chartItem.startDate} - ${chartItem.endDate}'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'DATE',
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  Text(
+                    chartItem.startDate,
+                    style: const TextStyle(color: Colors.white, fontSize: 8),
+                  ),
+                  const Text(
+                    'TO',
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  Text(
+                    chartItem.endDate,
+                    style: const TextStyle(color: Colors.white, fontSize: 8),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(
-              height: 90.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: chartItem.results.length,
-                itemBuilder: (context, i) =>
-                    _buildResultList(chartItem.results[i]),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                height: 80,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: chartItem.results.length,
+                  itemBuilder: (context, i) =>
+                      _buildResultList(chartItem.results[i]),
+                ),
               ),
             ),
           ],
@@ -128,16 +194,16 @@ class _ChartScreenState extends State<ChartScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 50,
+              width: 40,
               color: const Color.fromARGB(255, 233, 30, 216),
               child: Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
                 child: Text(
                   result.day,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 10,
                   ),
                 ),
               ),
@@ -151,7 +217,9 @@ class _ChartScreenState extends State<ChartScreen> {
                       for (int i = 0; i < result.openPanna.length; i++)
                         Text(
                           result.openPanna[i],
-                          style: const TextStyle(fontSize: 10),
+                          style: TextStyle(
+                              fontSize: 7,
+                              color: result.color ? Colors.red : Colors.black),
                         )
                     ],
                   ),
@@ -160,8 +228,10 @@ class _ChartScreenState extends State<ChartScreen> {
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     result.jodi,
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400,
+                        color: result.color ? Colors.red : Colors.black),
                   ),
                 ),
                 Padding(
@@ -171,7 +241,9 @@ class _ChartScreenState extends State<ChartScreen> {
                       for (int i = 0; i < result.closePanna.length; i++)
                         Text(
                           result.closePanna[i],
-                          style: const TextStyle(fontSize: 10),
+                          style: TextStyle(
+                              fontSize: 7,
+                              color: result.color ? Colors.red : Colors.black),
                         )
                     ],
                   ),
@@ -188,20 +260,26 @@ class _ChartScreenState extends State<ChartScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        DropdownButton<String>(
-          value: selectedYear,
-          items: List.generate(
-            DateTime.now().year - 2011,
-            (index) => DropdownMenuItem<String>(
-              value: (2012 + index).toString(),
-              child: Text((2012 + index).toString()),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+              color: AppColors.yellowType,
+              borderRadius: BorderRadius.circular(12)),
+          child: DropdownButton<String>(
+            value: selectedYear,
+            items: List.generate(
+              DateTime.now().year - 2011,
+              (index) => DropdownMenuItem<String>(
+                value: (2012 + index).toString(),
+                child: Text((2012 + index).toString()),
+              ),
             ),
+            onChanged: (value) {
+              setState(() {
+                selectedYear = value!;
+              });
+            },
           ),
-          onChanged: (value) {
-            setState(() {
-              selectedYear = value!;
-            });
-          },
         ),
         const SizedBox(
           width: 8,

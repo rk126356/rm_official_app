@@ -9,6 +9,7 @@ Future<Map<String, dynamic>> submitFamilyBids({
   required String marketId,
   required String userId,
   required String api,
+  required String title,
   String? type,
 }) async {
   String apiUrl = api;
@@ -18,18 +19,20 @@ Future<Map<String, dynamic>> submitFamilyBids({
       {
         "type": type ?? 'patta_group',
         "number": bids.digit.toString(),
-        "bid_point": bids.amount.toString()
+        "bid_point": bids.amount.toString(),
+        'game_category': title,
       }
     ],
   });
 
-  if (api == 'https://rmmatka.com/ravan/api/cycle-bids') {
+  if (api == 'https://rmmatka.com/app/api/cycle-bids') {
     bidsJson = jsonEncode({
       'bids': [
         {
           // "type": 'panna',
           "num_cycle": bids.digit.toString(),
-          "bid_point": bids.amount.toString()
+          "bid_point": bids.amount.toString(),
+          'game_category': title,
         }
       ],
     });

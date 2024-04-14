@@ -9,6 +9,7 @@ import 'package:rm_official_app/widgets/app_bar_widget.dart';
 
 import '../../const/colors.dart';
 import '../../controllers/delete_bid_controller.dart';
+import '../../controllers/fetch_balance_controller.dart';
 import '../../controllers/fetch_bid_history_controller.dart';
 import '../../models/bid_history_model.dart';
 import '../../provider/user_provider.dart';
@@ -16,9 +17,7 @@ import '../../widgets/all_bids_popup_widget.dart';
 import '../../widgets/bottom_contact_widget.dart';
 import '../../widgets/error_snackbar_widget.dart';
 import '../../widgets/heading_logo_widget.dart';
-import '../../widgets/heading_title_widget.dart';
 import '../../widgets/success_snackbar_widget.dart';
-import '../../widgets/white_side_heading_widget.dart';
 import '../navigation/drawer_nav_bar.dart';
 
 class BidHistoryScreen extends StatefulWidget {
@@ -173,15 +172,18 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
         showCoolErrorSnackbar(context, 'Error');
       }
     } else {
-      showDialog(
-        context: context,
-        builder: (_) => AllBidsWithDelete(
-          histories: bid.allHistory,
-          name: bid.allHistory.first.bidDate,
-        ),
-      );
+      bool deleted = false;
+      for (final bid in bid.allHistory) {
+        deleted = await deleteBid(bid, userProvider.user.id);
+      }
+      if (deleted) {
+        showCoolSuccessSnackbar(context, 'Bid deleted successfully');
+        histories.removeWhere((b) => b.ticketId == bid.ticketId);
+      } else {
+        showCoolErrorSnackbar(context, 'Error');
+      }
     }
-
+    fetchBalance(context);
     setState(() {
       _isButtonLoading = false;
     });
@@ -190,7 +192,9 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
   @override
   void initState() {
     super.initState();
+    fetchBalance(context);
     startDate = DateFormat('yyyy-M-d').format(DateTime.now());
+    // startDate = '2024-1-16';
     endDate = DateFormat('yyyy-M-d').format(DateTime.now());
     if (widget.type != null) {
       type = widget.type!;
@@ -200,12 +204,11 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       drawer: widget.isRoute ? null : const NavBar(),
-      appBar: AppBarWidget(
-        title: 'Welcome: ${userProvider.user.name}',
+      appBar: const AppBarWidget(
+        title: 'BID HISTORY',
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -228,7 +231,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     color: Colors.white,
                   ),
                   label: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'Start Date\n$startDate',
                       style: const TextStyle(color: Colors.white),
@@ -236,10 +239,10 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                   ),
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
+                        MaterialStateProperty.all<Color>(Colors.blue),
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                   ),
@@ -251,7 +254,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     color: Colors.white,
                   ),
                   label: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'End Date\n$endDate',
                       style: const TextStyle(color: Colors.white),
@@ -259,10 +262,10 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                   ),
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black),
+                        MaterialStateProperty.all<Color>(Colors.green),
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
                   ),
@@ -273,26 +276,32 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
               height: 8,
             ),
             OutlinedButton(
-              onPressed: () {
-                fetch();
-              },
+              onPressed: fetch,
               style: OutlinedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                side: const BorderSide(color: Colors.black, width: 1),
+                side: const BorderSide(color: Colors.blue, width: 2),
+                backgroundColor: Colors.blue.withOpacity(0.1),
               ),
-              child: const Text(
-                'SUBMIT',
-                style: TextStyle(color: Colors.black),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                child: Text(
+                  'SUBMIT',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(
-              height: 18,
-            ),
-            HeadingTitle(
-              title: startDate == endDate ? 'TODAY' : '$startDate to $endDate',
-            ),
+            // const SizedBox(
+            //   height: 18,
+            // ),
+            // HeadingTitle(
+            //   title: startDate == endDate ? 'TODAY' : '$startDate to $endDate',
+            // ),
             const SizedBox(
               height: 18,
             ),
@@ -304,7 +313,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     color: AppColors.redType,
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Text('Time & ID',
+                      child: Text('Time & Date',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,
@@ -410,8 +419,8 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
             color: Colors.blueGrey,
           ))),
           child: Container(
-            height: 60,
-            color: AppColors.primaryColor,
+            height: 65,
+            color: const Color.fromARGB(255, 253, 238, 188),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -428,13 +437,15 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                               DateFormat('dd-MM-yyyy hh:mm a').parse(
                                   histories[i].allHistory.first.createdAt)),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14),
+                              fontWeight: FontWeight.bold, fontSize: 13),
                         ),
                         Text(
-                          histories[i].ticketId.first,
+                          DateFormat('dd-MM-yy').format(
+                              DateFormat('dd-MM-yyyy hh:mm a').parse(
+                                  histories[i].allHistory.first.createdAt)),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 11,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -442,9 +453,10 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     ),
                   ),
                 ),
-                Container(
+                const VerticalDivider(
+                  color: Colors.black12,
                   width: 1,
-                  color: Colors.blueGrey,
+                  thickness: 2,
                 ),
                 Expanded(
                   flex: 5,
@@ -455,17 +467,19 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                       children: [
                         Text(
                           '${histories[i].allHistory.first.marketName} (${histories[i].allHistory.first.session.toUpperCase()})',
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 13,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
                         Text(
-                          histories[i].allHistory.first.type.toUpperCase(),
+                          histories[i].allHistory.first.category.toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                            fontSize: 11,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -473,9 +487,10 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     ),
                   ),
                 ),
-                Container(
+                const VerticalDivider(
+                  color: Colors.black12,
                   width: 1,
-                  color: Colors.blueGrey,
+                  thickness: 2,
                 ),
                 Expanded(
                   flex: 2,
@@ -493,7 +508,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                           Text(
                             'VIEW',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 11,
                               color: Colors.red,
                               fontWeight: FontWeight.w500,
                             ),
@@ -503,9 +518,10 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                     ),
                   ),
                 ),
-                Container(
+                const VerticalDivider(
+                  color: Colors.black12,
                   width: 1,
-                  color: Colors.blueGrey,
+                  thickness: 2,
                 ),
                 _isButtonLoading
                     ? const CircularProgressIndicator()
@@ -534,7 +550,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                                   const Text(
                                     'TIMES UP',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -543,7 +559,7 @@ class _BidHistoryScreenState extends State<BidHistoryScreen> {
                                   const Text(
                                     'DELETE',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                       color: Colors.red,
                                       fontWeight: FontWeight.w500,
                                     ),

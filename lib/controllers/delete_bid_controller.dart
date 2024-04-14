@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import '../models/bid_history_model.dart';
 
 Future<bool> deleteBid(BidHistory bid, String userId) async {
-  String apiUrl = 'https://rmmatka.com/ravan/api/delete-bid';
+  String apiUrl = 'https://rmmatka.com/app/api/delete-bid';
 
   Map<String, String> body = {
     'user_id': userId,
